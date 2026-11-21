@@ -35,7 +35,7 @@ pub const FLAGS: &[(char, u32, &str)] = &[
 pub fn get(path: &Path) -> io::Result<u32> {
     let file = open(path)?;
     let mut flags: libc::c_int = 0;
-    if unsafe { libc::ioctl(file.as_raw_fd(), FS_IOC_GETFLAGS, &mut flags) } != 0 {
+    if unsafe { libc::ioctl(file.as_raw_fd(), FS_IOC_GETFLAGS.try_into().unwrap(), &mut flags) } != 0 {
         return Err(io::Error::last_os_error());
     }
     Ok(flags as u32)
@@ -45,7 +45,7 @@ pub fn get(path: &Path) -> io::Result<u32> {
 pub fn set(path: &Path, flags: u32) -> io::Result<()> {
     let file = open(path)?;
     let flags = flags as libc::c_int;
-    if unsafe { libc::ioctl(file.as_raw_fd(), FS_IOC_SETFLAGS, &flags) } != 0 {
+    if unsafe { libc::ioctl(file.as_raw_fd(), FS_IOC_SETFLAGS.try_into().unwrap(), &flags) } != 0 {
         return Err(io::Error::last_os_error());
     }
     Ok(())
