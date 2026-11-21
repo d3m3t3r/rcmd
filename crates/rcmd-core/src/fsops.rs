@@ -2267,7 +2267,7 @@ fn fast_copy(
         ctx.file_done += n;
         ctx.progress(src);
     };
-    if size > 0 && unsafe { libc::ioctl(to, FICLONE, from) } == 0 {
+    if size > 0 && unsafe { libc::ioctl(to, FICLONE.try_into().unwrap(), from) } == 0 {
         done(ctx, size);
         return Ok(true);
     }
